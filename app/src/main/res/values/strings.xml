@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MovieApp</string>
+
+    <string name="fragment_dashboard.title">Discover</string>
+    <string name="fragment_dashboard.best_popular">BEST POPULAR FILMS AND SERIALS</string>
+
+    <string name="fragment_movie_datails.title">Details</string>
+    <string name="fragment_movie_datails.vote_count" formatted="false">%s VOTES</string>
+    <string name="fragment_movie_datails.storyline">STORYLINE</string>
+    <string name="fragment_movie_datails.trailer">PLAY TRAILER</string>
+    <string name="fragment_movie_datails.actors">ACTORS</string>
+    <string name="fragment_movie_datails.creators">CREATORS</string>
+    <string name="fragment_movie_datails.about">ABOUT FILM</string>
+    <string name="fragment_movie_datails.original_title">Original Title:</string>
+    <string name="fragment_movie_datails.type">Type:</string>
+    <string name="fragment_movie_datails.production">Production:</string>
+    <string name="fragment_movie_datails.premiere">Premiere:</string>
+    <string name="fragment_movie_datails.description">Description:</string>
+</resources>
