@@ -44,6 +44,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="8dp"
         android:letterSpacing="0.08"
+        android:textSize="10sp"
         android:textStyle="bold"
         android:textColor="@color/textLight"
         android:maxLines="1"

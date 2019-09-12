@@ -4,9 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_movie_details.*
+import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.imageResource
 import pl.arturostrowski.android.mvp.app.R
 import pl.arturostrowski.android.mvp.app.di.component.DaggerFragmentComponent
 import pl.arturostrowski.android.mvp.app.di.module.FragmentModule
@@ -14,15 +19,13 @@ import pl.arturostrowski.android.mvp.app.models.rx.response.MovieCreditsResponse
 import pl.arturostrowski.android.mvp.app.models.rx.response.MovieDetailsResponse
 import pl.arturostrowski.android.mvp.app.ui.adapter.ActorsAdapter
 import pl.arturostrowski.android.mvp.app.ui.adapter.CreatorsAdapter
+import pl.arturostrowski.android.mvp.app.ui.adapter.MovieDetailGenreAdapter
 import pl.arturostrowski.android.mvp.app.ui.main.MainActivity
 import pl.arturostrowski.android.mvp.app.ui.video.VideoFragment
 import pl.arturostrowski.android.mvp.app.util.Constants
 import pl.arturostrowski.android.mvp.app.util.DateUtils
 import pl.arturostrowski.android.mvp.app.util.showELog
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_movie_details.*
-import kotlinx.android.synthetic.main.fragment_movie_details.progressBar
-import org.jetbrains.anko.bundleOf
+import pl.arturostrowski.android.mvp.app.util.toast
 import java.util.*
 import javax.inject.Inject
 
@@ -42,6 +45,7 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
     lateinit var presenter: MovieDetailsContract.Presenter
     lateinit var listAdapter: ActorsAdapter
     lateinit var creatorsAdapter: CreatorsAdapter
+    lateinit var genresAdapter: MovieDetailGenreAdapter
     var movieID: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,38 +94,46 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
                 .fit()
                 .into(ivMovieDetails)
 
-        tvReleaseDate.text = DateUtils().convertDate(movieDetails.releaseDate, DateUtils.YYYYMMDD, DateUtils.YYYY)
-
-        ratingBar.rating = movieDetails.voteAverage.toFloat()/2
-        tvVoteCount.text = String.format(Locale.getDefault(), getString(R.string.fragment_movie_datails_vote_count), movieDetails.voteCount)
         tvVoteAverage.text = movieDetails.voteAverage.toString()
         tvTitle.text = movieDetails.title
-
-        tvTime.text = "${movieDetails.runtime/60}h ${movieDetails.runtime%60}min"
-
         tvStorylineContent.text = movieDetails.overview
+        tvOriginalTitleContent.text = movieDetails.originalTitle
+        tvPremiereContent.text = movieDetails.releaseDate
+        tvDescriptionContent.text = movieDetails.overview
+        tvVoteCount.text = String.format(Locale.getDefault(), getString(R.string.fragment_movie_datails_vote_count), movieDetails.voteCount)
+        tvTime.text = String.format(Locale.getDefault(), getString(R.string.fragment_movie_datails_time), movieDetails.runtime/60, movieDetails.runtime%60)
+        tvReleaseDate.text = DateUtils().convertDate(movieDetails.releaseDate, DateUtils.YYYYMMDD, DateUtils.YYYY)
+        ratingBar.rating = movieDetails.voteAverage.toFloat()/2
+
+        movieDetails.genres.forEachIndexed { index, genre ->
+            tvTypeContent.append(if(index+1 == movieDetails.genres.size) genre.name else "${genre.name}, ")
+        }
+        movieDetails.productionCompanies.forEachIndexed { index, company ->
+            tvProductionContent.append(if(index+1 == movieDetails.productionCompanies.size) company.name else "${company.name}, ")
+        }
 
         tvPlayTrailer.setOnClickListener {
             (context as MainActivity).switchContent(VideoFragment.newInstance(movieDetails.id), VideoFragment.TAG)
         }
 
-        tvOriginalTitleContent.text = movieDetails.originalTitle
-//        movieDetails.genres.forEach {
-//            tvTypeContent.append(it.name + ", ")
-//        }
-        movieDetails.genres.forEachIndexed { index, genre ->
-            tvTypeContent.append(if(index+1 == movieDetails.genres.size) genre.name else "${genre.name}, ")
+        ivFavMovie.setOnClickListener {
+            ivFavMovie.imageResource = if(ivFavMovie.drawable.constantState == ContextCompat.getDrawable(context!!, R.drawable.ic_favorite_border_white)!!.constantState){
+                R.drawable.ic_favorite_yellow
+            }else{
+                R.drawable.ic_favorite_border_white
+            }
         }
 
-//        tvProductionContent.text = movieDetails.
-        tvPremiereContent.text = movieDetails.releaseDate
-        tvDescriptionContent.text = movieDetails.overview
-
+        genresAdapter = MovieDetailGenreAdapter(movieDetails.genres){
+        }
+        recyclerViewGenres.apply {
+            layoutManager = LinearLayoutManager(activity, OrientationHelper.HORIZONTAL, false)
+            adapter = genresAdapter
+        }
     }
 
     override fun showMovieCredits(movieCredits: MovieCreditsResponse) {
         listAdapter = ActorsAdapter(movieCredits.cast){
-
         }
         recyclerViewActors.apply {
             layoutManager = LinearLayoutManager(activity, OrientationHelper.HORIZONTAL, false)
@@ -129,12 +141,15 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
         }
 
         creatorsAdapter = CreatorsAdapter(movieCredits.crew){
-
         }
         recyclerViewCreators.apply {
             layoutManager = LinearLayoutManager(activity, OrientationHelper.HORIZONTAL, false)
             adapter = creatorsAdapter
         }
+    }
+
+    override fun showToast(text: String) {
+        toast(text)
     }
 
     override fun showProgress(show: Boolean) {

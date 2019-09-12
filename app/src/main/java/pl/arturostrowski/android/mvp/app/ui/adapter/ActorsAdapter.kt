@@ -3,12 +3,12 @@ package pl.arturostrowski.android.mvp.app.ui.adapter
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_actors.view.*
 import pl.arturostrowski.android.mvp.app.R
 import pl.arturostrowski.android.mvp.app.models.rx.response.Cast
 import pl.arturostrowski.android.mvp.app.util.Constants
 import pl.arturostrowski.android.mvp.app.util.inflate
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_actors.view.*
 
 class ActorsAdapter(private val list: MutableList<Cast>, private val onClick: ((Cast) -> Unit)? = null): RecyclerView.Adapter<ActorsAdapter.ListViewHolder>() {
 
@@ -34,7 +34,7 @@ class ActorsAdapter(private val list: MutableList<Cast>, private val onClick: ((
                     .fit()
                     .into(itemView.ivActor)
             itemView.tvName.text = item.name
-            itemView.tvJob.visibility = View.INVISIBLE
+            itemView.tvJob.text = item.character
         }
     }
 }

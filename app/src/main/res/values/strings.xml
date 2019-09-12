@@ -6,6 +6,7 @@
 
     <string name="fragment_movie_datails.title">Details</string>
     <string name="fragment_movie_datails.vote_count" formatted="false">%s VOTES</string>
+    <string name="fragment_movie_datails.time" formatted="false">%sh %smin</string>
     <string name="fragment_movie_datails.storyline">STORYLINE</string>
     <string name="fragment_movie_datails.trailer">PLAY TRAILER</string>
     <string name="fragment_movie_datails.actors">ACTORS</string>
@@ -16,4 +17,9 @@
     <string name="fragment_movie_datails.production">Production:</string>
     <string name="fragment_movie_datails.premiere">Premiere:</string>
     <string name="fragment_movie_datails.description">Description:</string>
+
+
+    <string name="toast.add_fav">Added to Favourites</string>
+    <string name="toast.remove_fav">Removed from Favourites</string>
+
 </resources>

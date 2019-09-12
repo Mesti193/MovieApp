@@ -12,5 +12,7 @@
     <color name="backgroundLight">#1D2733</color>
 
     <color name="details_text">#42464f</color>
+
+    <color name="details_genre_border">#222831</color>
     <!--<color name="background">#1C1D28</color>-->
 </resources>

@@ -1,7 +1,6 @@
 package pl.arturostrowski.android.mvp.app.models.rx.response
 
 import com.google.gson.annotations.SerializedName
-import kotlin.collections.ArrayList
 
 data class MovieDetailsResponse(
         @SerializedName("adult")
@@ -30,8 +29,8 @@ data class MovieDetailsResponse(
         val popularity: Double,
         @SerializedName("poster_path")
         val posterPath: String,
-//        @SerializedName("production_companies")
-//        val page: Long,
+        @SerializedName("production_companies")
+        val productionCompanies: ArrayList<ProductionCompanies>,
 //        @SerializedName("production_countries")
 //        val page: Long,
         @SerializedName("release_date")
@@ -65,4 +64,16 @@ data class Genre(
         val id: Long,
         @SerializedName("name")
         val name: String
+)
+
+data class ProductionCompanies(
+        @SerializedName("id")
+        val id: Long,
+        @SerializedName("logo_path")
+        val logoPath: String,
+        @SerializedName("name")
+        val name: String,
+        @SerializedName("origin_country")
+        val originCountry: String
+
 )

@@ -9,6 +9,7 @@ class MovieDetailsContract {
     interface View : BaseContract.View {
         fun showProgress(show: Boolean)
         fun showErrorMessage(error: String)
+        fun showToast(text: String)
         fun showMovieDetails(movieDetails: MovieDetailsResponse)
         fun showMovieCredits(movieCredits: MovieCreditsResponse)
     }
